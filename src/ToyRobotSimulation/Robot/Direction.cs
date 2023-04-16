@@ -1,7 +1,8 @@
-namespace ANZToyRobotSimulation.Robot
+namespace ToyRobotSimulation.Robot
 {
     public enum Direction
     {
+        NONE,
         EAST = 0,
         WEST = 180,
         NORTH = 90,
