@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -23,6 +24,13 @@ namespace ToyRobotSimulation.Services
         }
 
 
+        public void Run(string runMode, string filePath)
+        {
+            if (runMode.ToLower() == "console")
+                ConsoleRun();
+            else
+                FileRun(filePath);
+        }
 
         internal bool verifyAndRunCommand(string input)
         {
@@ -34,20 +42,28 @@ namespace ToyRobotSimulation.Services
                 string facing = "";
                 if (arguments.Length > 1)
                 {
-                    string[] values = arguments[1].Split(",");
-                    if (values.Length == 3)
+                    var regex = new Regex(@"^[\d,\d,]{4}\w+");
+                    if (regex.IsMatch(arguments[1]))
                     {
+                        string[] values = arguments[1].Split(",");
                         positionX = Convert.ToInt32(values[0]);
                         positionY = Convert.ToInt32(values[1]);
                         facing = values[2];
-                        if (HandleCommands(command, positionX, positionY, facing.ToUpper()))
-                            return true;
+                        if (Enum.IsDefined(typeof(Direction), facing.ToUpper()))
+                        {
+                            if (HandleCommands(command, positionX, positionY, facing.ToUpper()))
+                                return true;
+                            else
+                            {
+                                _logger.LogInformation("Could not Execute command");
+                                return false;
+                            }
+                        }
                         else
                         {
-                            _logger.LogInformation("Could not Execute command");
+                            _logger.LogInformation("Incorrect direction - Please choose from East,West,North,South");
                             return false;
                         }
-
                     }
                     else
                     {
@@ -88,8 +104,12 @@ namespace ToyRobotSimulation.Services
                     success = _robot.Move();
                     break;
                 case "report":
-                    Log.Logger.Information(_robot.Report());
-                    success = true;
+                    string output = _robot.Report();
+                    if (!String.IsNullOrEmpty(output))
+                    {
+                        success = true;
+                        Log.Logger.Information(output);
+                    }
                     break;
                 case "place":
                     success = _robot.Place(positionX, positionY, facing);
@@ -106,13 +126,17 @@ namespace ToyRobotSimulation.Services
             string? input = "";
             while (input != "exit")
             {
-                input = Console.ReadLine();
-                if (input != null)
+                try
                 {
-                    if (!verifyAndRunCommand(input))
+                    input = Console.ReadLine();
+                    if (input != null && input.ToLower() != "exit")
                     {
-                        continue;
+                        verifyAndRunCommand(input);
                     }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($" Error while running commands {ex.Message}");
                 }
             }
         }
@@ -121,7 +145,14 @@ namespace ToyRobotSimulation.Services
             var lines = File.ReadLines(filepath);
             foreach (var line in lines)
             {
-                verifyAndRunCommand(line);
+                try
+                {
+                    verifyAndRunCommand(line);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($" Error while running commands through File {ex.Message}");
+                }
             }
 
         }

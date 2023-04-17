@@ -7,7 +7,7 @@ namespace ToyRobotSimulation.Robot
 {
     public class ToyRobot : IRobot
     {
-        private readonly ILogger<ToyRobot> _log;
+        private readonly ILogger<ToyRobot> _logger;
         public int positionX;
         public int positionY;
         I2DPlayingBoard playingBoard;
@@ -20,7 +20,7 @@ namespace ToyRobotSimulation.Robot
             positionX = 0;
             positionY = 0;
             placedOnBoard = false;
-            _log = logger;
+            _logger = logger;
         }
         public bool Left()
         {
@@ -42,7 +42,7 @@ namespace ToyRobotSimulation.Robot
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Occurred while tryign to move left : " + ex.Message);
+                _logger.LogError($"Exception Occurred while tryign to move left :{ex.Message} ");
                 return false;
             }
         }
@@ -90,7 +90,7 @@ namespace ToyRobotSimulation.Robot
             }
             catch (Exception ex)
             {
-               Console.WriteLine("Exception Occurred while tryign to move : " + ex.Message);
+               _logger.LogError($"Exception Occurred while tryign to move : {ex.Message}");
                 return false;
             }
         }
@@ -113,7 +113,7 @@ namespace ToyRobotSimulation.Robot
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Occurred while tryign to Place robot : " + ex.Message);
+                _logger.LogError($"Exception Occurred while tryign to Place robot : {ex.Message}");
                 return false;
             }
         }
@@ -121,7 +121,7 @@ namespace ToyRobotSimulation.Robot
         public string Report()
         {
             if (placedOnBoard)
-                return String.Format("OUTPUT: " + positionX + "," + positionY + "," + direction);
+                return String.Format($"OUTPUT: {positionX},{positionY},{direction}");
             else return String.Empty;
         }
 
@@ -144,7 +144,7 @@ namespace ToyRobotSimulation.Robot
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Occurred while tryign to move Right : " + ex.Message);
+                _logger.LogError($"Exception Occurred while tryign to move Right : {ex.Message}");
                 return false;
             }
         }
@@ -161,7 +161,7 @@ namespace ToyRobotSimulation.Robot
             }
             catch (Exception ex)
             {
-               Console.WriteLine("Exception Occurred while checking safety of robot : " + ex.Message);
+               _logger.LogError($"Exception Occurred while checking safety of robot : {ex.Message}");
                 return false;
             }
         }

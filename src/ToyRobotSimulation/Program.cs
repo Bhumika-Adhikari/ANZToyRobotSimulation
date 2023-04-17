@@ -18,19 +18,14 @@ class Program
     static int dimension = 0;
     static void Main(string[] args)
     {
-
         initiateConfiguration(args);
-
-        // 
 
         var builder = new ConfigurationBuilder();
 
-        // Log.Logger = new LoggerConfiguration()
-        //             .ReadFrom
-        //             .Configuration(builder.Build())
-        //             .Enrich.FromLogContext()
-        //             .WriteTo.Console()
-        //             .CreateLogger();
+        Log.Logger = new LoggerConfiguration()
+                    .WriteTo.Console()
+                    .WriteTo.File(@"Logs/log.txt", rollingInterval: RollingInterval.Hour)
+                    .CreateLogger();
 
         Log.Logger.Information("Welcome to the Robot simulation");
 
@@ -39,20 +34,8 @@ class Program
         .Build();
 
         var svc = ActivatorUtilities.CreateInstance<ToyRobotSimulationService>(host.Services);
-        if (runMode.ToLower() == "console")
-            svc.ConsoleRun();
-        else
-            svc.FileRun(filepath);
+        svc.Run(runMode, filepath);
     }
-
-    static void BuildConfiguration(IConfigurationBuilder builder)
-    {
-        builder.SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables();
-
-    }
-
 
     static IHostBuilder CreatehostBuilder(string[] args)
     {
@@ -67,10 +50,9 @@ class Program
     }
     static void initiateConfiguration(string[] args)
     {
-
+        try{
         if (args.Length > 0)
         {
-
             dimension = Convert.ToInt32(args[0]);
             if (args.Length > 1)
             {
@@ -86,7 +68,15 @@ class Program
         }
         else
         {
+            // assign default values
             runMode = "console";
+            dimension = 5;
+        }
+        }
+        catch(Exception ex)
+        {
+            Log.Logger.Error($"Could not initiate with given configuration - Proceeding with defualt configuration {ex.Message} " );
+            runMode="console";
             dimension = 5;
         }
     }
