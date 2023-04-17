@@ -26,10 +26,15 @@ namespace ToyRobotSimulation.Services
 
         public void Run(string runMode, string filePath)
         {
+            try{
             if (runMode.ToLower() == "console")
                 ConsoleRun();
             else
                 FileRun(filePath);
+            }
+            catch(Exception ex){
+                Log.Logger.Error($" Application Exited unexpectedly, Please check Logs for further details {ex.Message}");
+            }
         }
 
         internal bool verifyAndRunCommand(string input)
