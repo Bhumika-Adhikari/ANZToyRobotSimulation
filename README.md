@@ -1,6 +1,6 @@
 # ANZToyRobotSimulation
 
-This repo contains a console application that simaulates a Toy robot moving on a sqaure tabletop.
+This repo contains a console application that simulates a Toy robot moving on a square tabletop.
 
 
 - [Getting started](#getting-started)
@@ -13,15 +13,16 @@ This repo contains a console application that simaulates a Toy robot moving on a
 
 ### Prerequisites
 
-1. .NET Runtime
-2. Visual Studio Code
+1. .NET Runtime (.NET 6.0)
+2. Visual Studio Code / Visual Studio
 
 ### Running locally
 
-1. Clone the repository
-2. Open terminal and navigate to dist Folder.
-3. `dotnet ToyRobotSimulation.dll` to run the project.
-4. `dotnet ToyRobotSimulation.dll 5 file FILEPATH` to run the project with commands in a file
+1. Clone the repository.
+2. Open terminal and navigate to checkout Folder.
+3. `dotnet dist/ToyRobotSimulation.dll` to run the project using standard input.
+4. To exit the project while running in standard input mode, use the command `exit`. 
+5. `dotnet dist/ToyRobotSimulation.dll 5 file src/ToyRobotSimulation/FileCommands.txt` to run the project with commands in a file.
 
 ## Features
 - The Robot can understand the following commands - 
@@ -36,9 +37,10 @@ This repo contains a console application that simaulates a Toy robot moving on a
 - REPORT will announce the X,Y and F of the robot.
 - Any Move which can result into the robot fall is ignored.
 
-## Publish dist
+## Publish to `dist` folder
 
-1. Run `dotnet publish -o dist` in your working directory.
+1. cd `src/ToyRobotSimulation`.
+2. Run `dotnet publish -o ../../dist` in your working directory.
 
 ## Test cases
 
