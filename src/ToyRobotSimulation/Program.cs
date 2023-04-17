@@ -18,8 +18,6 @@ class Program
     static int dimension = 0;
     static void Main(string[] args)
     {
-        initiateConfiguration(args);
-
         var builder = new ConfigurationBuilder();
 
         Log.Logger = new LoggerConfiguration()
@@ -28,6 +26,8 @@ class Program
                     .CreateLogger();
 
         Log.Logger.Information("Welcome to the Robot simulation");
+
+        initiateConfiguration(args);
 
         var host = CreatehostBuilder(args)
         .UseSerilog()
@@ -50,33 +50,41 @@ class Program
     }
     static void initiateConfiguration(string[] args)
     {
-        try{
-        if (args.Length > 0)
+        try
         {
-            dimension = Convert.ToInt32(args[0]);
-            if (args.Length > 1)
+            if (args.Length > 0)
             {
-                runMode = args[1];
-                if (runMode.ToLower() == "file")
+                dimension = Convert.ToInt32(args[0]);
+                if (args.Length > 1)
                 {
-                    if (args.Length > 2)
+                    runMode = args[1];
+                    if (runMode.ToLower() == "file")
                     {
-                        filepath = args[2];
+                        if (args.Length > 2)
+                        {
+                            filepath = args[2];
+                        }
+                        else
+                        {
+                            Log.Logger.Error("Could not find filepath defaulting to console");
+                            runMode = "console";
+                        }
                     }
                 }
+                else
+                    runMode = "console";
+            }
+            else
+            {
+                // assign default values
+                runMode = "console";
+                dimension = 5;
             }
         }
-        else
+        catch (Exception ex)
         {
-            // assign default values
+            Log.Logger.Error($"Could not initiate with given configuration - Proceeding with defualt configuration {ex.Message} ");
             runMode = "console";
-            dimension = 5;
-        }
-        }
-        catch(Exception ex)
-        {
-            Log.Logger.Error($"Could not initiate with given configuration - Proceeding with defualt configuration {ex.Message} " );
-            runMode="console";
             dimension = 5;
         }
     }
