@@ -20,9 +20,9 @@ This repo contains a console application that simulates a Toy robot moving on a 
 
 1. Clone the repository.
 2. Open terminal and navigate to checkout Folder.
-3. `dotnet dist/ToyRobotSimulation.dll` to run the project using standard input.
+3. `dotnet dist/ToyRobotSimulation.dll` to run the project using standard input. This command by default runs the application for a 5 x 5 unit square tabletop using standard input (`console` mode) from the user.
 4. To exit the project while running in standard input mode, use the command `exit`. 
-5. `dotnet dist/ToyRobotSimulation.dll 5 file src/ToyRobotSimulation/FileCommands.txt` to run the project with commands in a file.
+5. `dotnet dist/ToyRobotSimulation.dll 5 file src/ToyRobotSimulation/FileCommands.txt` to run the project with arguments where the first argument denotes the dimension of the square tabletop (default 5), the second argument denotes the run mode of the application (`console/file`) defaults to `console` and the last argument to denotes the filepath to read the commands from.
 
 ## Features
 - The Robot can understand the following commands - 
