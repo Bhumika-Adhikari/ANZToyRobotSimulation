@@ -44,6 +44,22 @@ public class UnitTest
     }
 
     [Fact]
+     public void PlaceWithInValidDirectionDoesNotMoveRobot()
+    {
+        // Arrange
+        I2DPlayingBoard _board = new SquareBoard(5);
+         ILogger<ToyRobot> logger = new NullLogger<ToyRobot>();
+        ToyRobot _robot = new ToyRobot(_board,logger);
+        ToyRobot _expected = new ToyRobot(_board,logger);
+
+        // Act
+        _robot.Place(0,1,"SOUTHWEST");
+
+        // Assert
+        Assert.Equal(_expected, _robot);
+    }
+
+    [Fact]
     public void MoveValidLocationMovesTheRobotOneUnit()
     {
         // Arrange
@@ -248,5 +264,61 @@ public class UnitTest
 
         // Assert
         Assert.Equal(_expected, _actual);
+    }
+
+    [Fact]
+    public void ReportIgnoredWhenRobotIsNotPlaced(){
+            
+        // Arrange
+        I2DPlayingBoard _board = new SquareBoard(5);
+         ILogger<ToyRobot> logger = new NullLogger<ToyRobot>();
+        ToyRobot _robot = new ToyRobot(_board,logger);
+        string _expected = String.Empty;
+
+        // Act
+        string _actual = _robot.Report();
+
+        // Assert
+        Assert.Equal(_expected, _actual);
+    }
+
+    [Fact]
+    public void MoveIgnoredWhenrobotIsNotPlaced(){
+        // Arrange
+        I2DPlayingBoard _board = new SquareBoard(5);
+         ILogger<ToyRobot> logger = new NullLogger<ToyRobot>();
+        ToyRobot _robot = new ToyRobot(_board,logger);
+        ToyRobot _expected = new ToyRobot(_board,logger);
+        // Act
+        _robot.Move();
+
+        // Assert
+        Assert.Equal(_expected, _robot);
+    }
+
+    public void LeftIgnoredWhenrobotIsNotPlaced(){
+        // Arrange
+        I2DPlayingBoard _board = new SquareBoard(5);
+         ILogger<ToyRobot> logger = new NullLogger<ToyRobot>();
+        ToyRobot _robot = new ToyRobot(_board,logger);
+        ToyRobot _expected = new ToyRobot(_board,logger);
+        // Act
+        _robot.Left();
+
+        // Assert
+        Assert.Equal(_expected, _robot);
+    }
+
+     public void RightIgnoredWhenrobotIsNotPlaced(){
+        // Arrange
+        I2DPlayingBoard _board = new SquareBoard(5);
+         ILogger<ToyRobot> logger = new NullLogger<ToyRobot>();
+        ToyRobot _robot = new ToyRobot(_board,logger);
+        ToyRobot _expected = new ToyRobot(_board,logger);
+        // Act
+        _robot.Right();
+
+        // Assert
+        Assert.Equal(_expected, _robot);
     }
 }
