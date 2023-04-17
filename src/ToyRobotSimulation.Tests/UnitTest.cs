@@ -296,6 +296,7 @@ public class UnitTest
         Assert.Equal(_expected, _robot);
     }
 
+    [Fact]
     public void LeftIgnoredWhenrobotIsNotPlaced(){
         // Arrange
         I2DPlayingBoard _board = new SquareBoard(5);
@@ -309,6 +310,7 @@ public class UnitTest
         Assert.Equal(_expected, _robot);
     }
 
+    [Fact]
      public void RightIgnoredWhenrobotIsNotPlaced(){
         // Arrange
         I2DPlayingBoard _board = new SquareBoard(5);
